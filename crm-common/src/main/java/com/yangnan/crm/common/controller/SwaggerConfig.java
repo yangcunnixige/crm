@@ -31,10 +31,10 @@ public class SwaggerConfig{
     private ApiInfo getApiInfo() {
         return new ApiInfoBuilder()
                 .title("CRM后台接口api")// 文档页标题
-                .contact(new Contact("yangnan", "https://www.situ.com", "abc@situ.com"))// 联系人信息
-                .description("思途CRM后台接口提供的api文档") //详细信息
+                .contact(new Contact("yangnan", "wu", "1721380260@qq.com"))// 联系人信息
+                .description("CRM后台接口提供的api文档") //详细信息
                 .version("1.0.1")  //文档版本号
-                .termsOfServiceUrl("https://www.situ.com") //网站地址
+                .termsOfServiceUrl("无") //网站地址
                 .build();
     }
 }

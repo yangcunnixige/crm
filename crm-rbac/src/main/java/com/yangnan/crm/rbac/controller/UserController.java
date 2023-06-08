@@ -12,11 +12,8 @@ import io.swagger.annotations.ApiImplicitParam;
 import io.swagger.annotations.ApiImplicitParams;
 import io.swagger.annotations.ApiOperation;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
+import springfox.documentation.annotations.ApiIgnore;
 
 import java.util.HashMap;
 import java.util.List;
@@ -37,6 +34,28 @@ import java.util.Map;
 public class UserController {
     @Autowired
     private IUserService userService;
+
+
+    @PostMapping("/login")
+    public JSONResult login() {
+        Map<String,Object> map = new HashMap<>();
+        map.put("token","admin");
+        return JSONResult.ok(map);
+    }
+
+    @GetMapping("/info")
+    public JSONResult info(){
+        Map<String, String> map = new HashMap<>();
+        map.put("name", "admin");
+        map.put("avatar", "https://wpimg.wallstcn.com/f778738c-e4f8-4870-b634-56703b4acafe.gif");
+        return JSONResult.ok(map);
+    }
+
+    @PostMapping("/logout")
+    public JSONResult logout() {
+        System.out.println("UserController.logout");
+        return JSONResult.ok("退出成功");
+    }
 
     @ApiOperation(value = "分页", notes = "根据page第几页，limit每页有多少条，查询当前页的数据")
     @ApiImplicitParams({
@@ -60,4 +79,15 @@ public class UserController {
         return JSONResult.ok(list);
     }
 
+    @ApiOperation(value = "删除", notes = "根据当前ID删除数据")
+    @ApiImplicitParams({
+            @ApiImplicitParam(name = "id", value = "编号", required = true)
+    })
+    //对于swagger，不适用RequestMapping
+    //因为RequestMapping支持任意请求方式，swagger会为整个接口生成7种请求方式的文档。
+    @DeleteMapping("/deleteById/{id}")
+    public JSONResult deleteById(@PathVariable("id") Integer id) {
+        boolean isSuccess = userService.removeById(id);
+        return isSuccess == true ? JSONResult.ok("删除成功") : JSONResult.error("删除失败");
+    }
 }

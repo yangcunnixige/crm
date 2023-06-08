@@ -8,8 +8,8 @@ import io.swagger.annotations.ApiModelProperty;
 // JSON格式的通用响应对象，封装的就是后台返回给前台的所有信息
 @ApiModel(value = "返回信息的封装", description = "封装通用的JSON响应对象返回给前台")
 public class JSONResult {
-    public static final int ERROR = 1;
-    public static final int OK = 0;
+    public static final int ERROR = 20001;
+    public static final int OK = 20000;
     public static final int NO_PERMISSTION = 2;
 
     // 当前状态（程序员判断状态）:成功、失败、未登录、没有权限
