@@ -40,6 +40,7 @@ public class UserController {
     public JSONResult login() {
         Map<String,Object> map = new HashMap<>();
         map.put("token","admin");
+        System.out.println("UserController.login");
         return JSONResult.ok(map);
     }
 
