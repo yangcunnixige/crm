@@ -2,6 +2,7 @@ package com.yangnan.crm.rbac.controller;
 
 
 
+import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.yangnan.crm.rbac.pojo.User;
@@ -91,4 +92,26 @@ public class UserController {
         boolean isSuccess = userService.removeById(id);
         return isSuccess == true ? JSONResult.ok("删除成功") : JSONResult.error("删除失败");
     }
+
+    @PostMapping("/add")
+    public JSONResult add(@RequestBody User user) {
+        System.out.println("user: " + user);
+        boolean isSuccess = userService.save(user);
+        return isSuccess == true ? JSONResult.ok("添加成功") : JSONResult.error("添加失败");
+    }
+
+    @GetMapping("/selectById/{id}")
+    public JSONResult selectById(@PathVariable("id") Long id) {
+        QueryWrapper wrapper = new QueryWrapper();
+        wrapper.eq("id", id);
+        User user = userService.getOne(wrapper);
+        return JSONResult.ok(user);
+    }
+
+    @PutMapping("/update")
+    public JSONResult update(@RequestBody User user) {
+        boolean isSuccess = userService.updateById(user);
+        return isSuccess == true ? JSONResult.ok("更新成功") : JSONResult.error("更新失败");
+    }
+
 }
