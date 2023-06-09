@@ -87,7 +87,7 @@ public class UserController {
     //对于swagger，不适用RequestMapping
     //因为RequestMapping支持任意请求方式，swagger会为整个接口生成7种请求方式的文档。
     @DeleteMapping("/deleteById/{id}")
-    public JSONResult deleteById(@PathVariable("id") Integer id) {
+    public JSONResult deleteById(@PathVariable("id") Long id) {
         boolean isSuccess = userService.removeById(id);
         return isSuccess == true ? JSONResult.ok("删除成功") : JSONResult.error("删除失败");
     }
