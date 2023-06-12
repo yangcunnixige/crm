@@ -16,7 +16,7 @@ import com.baomidou.mybatisplus.generator.fill.Property;
 
 public class MPGenerator {
     //需要配置
-    private static final String dbTables = "students";             //需要生成的表名
+    private static final String dbTables = "role,permission,user_role,role_permission";             //需要生成的表名
     private static final Boolean enableSwagger = false;                 //是否开启Swagger
 
     public static void main(String[] args) {
@@ -51,6 +51,8 @@ public class MPGenerator {
         // 设置需要映射的表名  用逗号分割
         strategyConfigBuilder.addInclude(dbTables.split(","));
         strategyConfigBuilder.entityBuilder().idType(IdType.NONE);
+        //主键使用雪花算法
+        strategyConfigBuilder.entityBuilder().idType(IdType.ASSIGN_ID);
         // 下划线转驼峰
         strategyConfigBuilder.entityBuilder().naming(NamingStrategy.underline_to_camel);
         strategyConfigBuilder.entityBuilder().columnNaming(NamingStrategy.underline_to_camel);
