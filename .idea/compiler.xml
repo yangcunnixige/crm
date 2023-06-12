@@ -9,12 +9,14 @@
         <outputRelativeToContentRoot value="true" />
         <module name="crm-common" />
         <module name="crm-rbac" />
+        <module name="crm-oss" />
       </profile>
     </annotationProcessing>
   </component>
   <component name="JavacSettings">
     <option name="ADDITIONAL_OPTIONS_OVERRIDE">
       <module name="crm-common" options="-parameters" />
+      <module name="crm-oss" options="-parameters" />
       <module name="crm-rbac" options="-parameters" />
     </option>
   </component>

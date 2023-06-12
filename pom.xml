@@ -11,6 +11,7 @@
     <modules>
         <module>crm-rbac</module>
         <module>crm-common</module>
+        <module>crm-oss</module>
     </modules>
 
     <parent>
