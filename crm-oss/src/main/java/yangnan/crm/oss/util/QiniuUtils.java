@@ -11,10 +11,10 @@ import com.qiniu.storage.model.DefaultPutRet;
 import com.qiniu.util.Auth;
 
 public class QiniuUtils {
-    public static final String ACCESS_KEY = "U_DBvA2v-Fq22-N5ayc-Yc-aiTql2oFp1SMHJTfS";
-    public static final String SECRET_KEY = "7cKiobWN5Ga7gUKBU8qTs9s2dt6aTAnd9Y5cwK33";
-    public static final String BUCKET = "crm230301";
-    public static final String IMG_SERVER_QINIU = "http://rw4cr212l.hd-bkt.clouddn.com/";
+    public static final String ACCESS_KEY = "47Wnc2izFYp6_SyQNRWBYJMRnNGdHY8_CxPP3rPd";
+    public static final String SECRET_KEY = "Dnu_wb_cOq4tSC55juNgnDv96tbp5g0P_fKU0fj8";
+    public static final String BUCKET = "crm23";
+    public static final String IMG_SERVER_QINIU = "http://rw4e9fi6b.hd-bkt.clouddn.com/";
 
     public static void upload2Qiniu(String filePath,String fileName){
         //构造一个带指定 Region 对象的配置类
