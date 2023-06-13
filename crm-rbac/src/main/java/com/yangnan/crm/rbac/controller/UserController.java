@@ -114,4 +114,13 @@ public class UserController {
         return isSuccess == true ? JSONResult.ok("更新成功") : JSONResult.error("更新失败");
     }
 
+    @PutMapping("/updateStatus/{id}/{status}")
+    public JSONResult updateStatus(@PathVariable("id") Long id, @PathVariable("status") Integer status) {
+        User user = new User();
+        user.setId(id);
+        user.setStatus(status);
+        boolean isSuccess = userService.updateById(user);
+        return isSuccess == true ? JSONResult.ok("更新成功") : JSONResult.error("更新失败");
+    }
+
 }

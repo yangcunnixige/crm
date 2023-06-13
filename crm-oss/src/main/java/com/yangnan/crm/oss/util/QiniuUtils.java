@@ -1,4 +1,4 @@
-package yangnan.crm.oss.util;
+package com.yangnan.crm.oss.util;
 
 import com.google.gson.Gson;
 import com.qiniu.common.QiniuException;

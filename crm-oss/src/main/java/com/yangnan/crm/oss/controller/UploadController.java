@@ -1,11 +1,11 @@
-package yangnan.crm.oss.controller;
+package com.yangnan.crm.oss.controller;
 
 import com.yangnan.crm.common.util.JSONResult;
 import org.apache.velocity.shaded.commons.io.FilenameUtils;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
-import yangnan.crm.oss.util.QiniuUtils;
+import com.yangnan.crm.oss.util.QiniuUtils;
 
 import java.io.IOException;
 import java.util.UUID;
