@@ -16,6 +16,8 @@ public class SwaggerConfig{
 
     // http://localhost:8082/swagger-ui/index.html
     // http://localhost:8082/doc.html
+    // http://localhost:8083/swagger-ui/index.html
+    // http://localhost:8083/doc.html
 
     // 配置swagger2核心配置 docket
     @Bean

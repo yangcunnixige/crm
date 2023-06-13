@@ -1,6 +1,7 @@
 package com.yangnan.crm.oss.controller;
 
 import com.yangnan.crm.common.util.JSONResult;
+import io.swagger.annotations.Api;
 import org.apache.velocity.shaded.commons.io.FilenameUtils;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
