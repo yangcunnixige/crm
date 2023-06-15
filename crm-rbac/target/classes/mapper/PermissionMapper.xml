@@ -2,4 +2,30 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.yangnan.crm.rbac.mapper.PermissionMapper">
 
+    <select id="selectPermissionByUserId" resultType="com.yangnan.crm.rbac.pojo.Permission">
+        SELECT DISTINCT
+            p.id,
+            p.pid,
+            p.name,
+            p.type,
+            p.path,
+            p.component,
+            p.permission_value,
+            p.icon,
+            p.sort,
+            p.status,
+            p.gmt_create,
+            p.gmt_modified
+        FROM user_role ur
+                 INNER JOIN role_permission rp
+                            ON ur.role_id = rp.role_id
+                 INNER JOIN permission p
+                            ON rp.permission_id = p.id
+        WHERE ur.user_id = #{id}
+          AND p.status = 1
+          AND rp.deleted = 0
+          AND ur.deleted = 0
+          AND p.deleted = 0
+        ORDER BY p.sort
+    </select>
 </mapper>
