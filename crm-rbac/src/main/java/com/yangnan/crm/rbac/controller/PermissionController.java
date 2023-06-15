@@ -10,6 +10,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.Map;
 import java.util.Random;
 
 /**
@@ -60,4 +61,15 @@ public class PermissionController {
         return isSuccess == true ? JSONResult.ok("更新成功") : JSONResult.error("更新失败");
     }
 
+    @GetMapping("/selectAssignedPermission/{roleId}")
+    public JSONResult selectAssignedRole(@PathVariable("roleId") Long roleId) {
+        Map<String, Object> map = permissionService.selectAssignedRole(roleId);
+        return JSONResult.ok(map);
+    }
+
+    @PostMapping("/assignPermission")
+    public JSONResult assignPermission(Long roleId, Long[] permissionIds) {
+        permissionService.assignPermission(roleId, permissionIds);
+        return JSONResult.ok("分配成功");
+    }
 }

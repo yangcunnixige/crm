@@ -5,7 +5,10 @@ package com.yangnan.crm.rbac.controller;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
+import com.yangnan.crm.common.util.JwtUtils;
+import com.yangnan.crm.common.util.MD5Util;
 import com.yangnan.crm.rbac.pojo.User;
+import com.yangnan.crm.rbac.pojo.vo.UserLoginVO;
 import com.yangnan.crm.rbac.service.IUserService;
 import com.yangnan.crm.common.util.JSONResult;
 import io.swagger.annotations.Api;
@@ -16,6 +19,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 import springfox.documentation.annotations.ApiIgnore;
 
+import javax.servlet.http.HttpServletRequest;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -38,18 +42,41 @@ public class UserController {
 
 
     @PostMapping("/login")
-    public JSONResult login() {
+    public JSONResult login(@RequestBody UserLoginVO userLoginVO) {
+        User user = userService.selectByUsername(userLoginVO.getUsername());
+        if (user == null) {
+            return JSONResult.error("用户名不存在");
+        }
+        //判断密码是不是一致
+        String md5Password = MD5Util.MD5Encode(userLoginVO.getPassword());
+        if (!user.getPassword().equalsIgnoreCase(md5Password)) {
+            return JSONResult.error("密码不正确");
+        }
+
+        //判断用户是不是禁用
+        if (user.getStatus() == 0) {
+            return JSONResult.error("用户已经被禁用");
+        }
+
+        //如果能执行到这里，证明username和password登录成功
+        String token = JwtUtils.createToken(user.getId(), user.getName());
+
         Map<String,Object> map = new HashMap<>();
-        map.put("token","admin");
+        map.put("token",token);
         System.out.println("UserController.login");
         return JSONResult.ok(map);
     }
 
     @GetMapping("/info")
-    public JSONResult info(){
-        Map<String, String> map = new HashMap<>();
-        map.put("name", "admin");
-        map.put("avatar", "https://wpimg.wallstcn.com/f778738c-e4f8-4870-b634-56703b4acafe.gif");
+    public JSONResult info(HttpServletRequest request) {
+        //获得请求头token字符串
+        String token = request.getHeader("token");
+        //从token字符串拿到用户名
+        String username = JwtUtils.getUsername(token);
+        //根据用户名获取用户信息（基本信息、目录权限和菜单权限组成的树形结构、按钮权限）
+        Map<String, Object> map = userService.selectUserPermissionInfo(username);
+        //map.put("name", "admin");
+        //map.put("avatar", "https://wpimg.wallstcn.com/f778738c-e4f8-4870-b634-56703b4acafe.gif");
         return JSONResult.ok(map);
     }
 

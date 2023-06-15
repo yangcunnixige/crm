@@ -3,9 +3,11 @@ package com.yangnan.crm.rbac.service.impl;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.yangnan.crm.rbac.pojo.Permission;
 import com.yangnan.crm.rbac.mapper.PermissionMapper;
+import com.yangnan.crm.rbac.pojo.RolePermission;
 import com.yangnan.crm.rbac.pojo.vo.PermissionVO;
 import com.yangnan.crm.rbac.service.IPermissionService;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
+import com.yangnan.crm.rbac.service.IRolePermissionService;
 import com.yangnan.crm.rbac.util.ConvertUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -13,7 +15,9 @@ import org.springframework.util.CollectionUtils;
 
 import javax.annotation.Resource;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 /**
  * <p>
@@ -27,16 +31,51 @@ import java.util.List;
 public class PermissionServiceImpl extends ServiceImpl<PermissionMapper, Permission> implements IPermissionService {
 
     @Autowired(required=false)
-    private PermissionMapper permissionMapper;
+    //private PermissionMapper permissionMapper;
+    private IRolePermissionService rolePermissionService;
 
     @Override
     public List<PermissionVO> selectAll() {
         //1.查找权限表中所有的权限
-        List<Permission> permissionList = permissionMapper.selectList(new QueryWrapper<Permission>().orderByAsc("sort"));
+        List<Permission> permissionList = baseMapper.selectList(new QueryWrapper<Permission>().orderByAsc("sort"));
         List<PermissionVO> permissionVOList = ConvertUtil.convertList(permissionList, PermissionVO.class);
         //2.按照父子关系构件树形结构
         List<PermissionVO> treeList = buildTree(permissionVOList);
         return treeList;
+    }
+
+    @Override
+    public Map<String, Object> selectAssignedRole(Long roleId) {
+        List<PermissionVO> permissionVOList = selectAll();
+        //根据角色roleId查询这个角色下面所有的权限
+        //List<RolePermission> rolePermissionList = rolePermissionService.list(new QueryWrapper<RolePermission>().eq("role_id", roleId).select("permission_id"));
+        QueryWrapper<RolePermission> queryWrapper = new QueryWrapper<>();
+        queryWrapper.eq("role_id", roleId).select("permission_id");
+        List<RolePermission> rolePermissionList = rolePermissionService.list(queryWrapper);
+        List<Long> assignedPermissionIdList = new ArrayList<>();
+        for (RolePermission rolePermission : rolePermissionList) {
+            assignedPermissionIdList.add(rolePermission.getPermissionId());
+        }
+
+        Map<String, Object> map = new HashMap<>();
+        map.put("permissionVOList", permissionVOList);
+        map.put("assignedPermissionIdList", assignedPermissionIdList);
+        return map;
+    }
+
+    @Override
+    public void assignPermission(Long roleId, Long[] permissionIds) {
+        //在role_permission表里面先删除roleId分配的权限
+        rolePermissionService.remove(new QueryWrapper<RolePermission>().eq("role_id", roleId));
+        //给这个角色分配权限
+        List<RolePermission> rolePermissionList = new ArrayList<>();
+        for (Long permissionId : permissionIds) {
+            RolePermission rolePermission = new RolePermission();
+            rolePermission.setRoleId(roleId);
+            rolePermission.setPermissionId(permissionId);
+            rolePermissionList.add(rolePermission);
+        }
+        rolePermissionService.saveBatch(rolePermissionList);
     }
 
     private List<PermissionVO> buildTree(List<PermissionVO> permissionVOList) {
@@ -68,6 +107,18 @@ public class PermissionServiceImpl extends ServiceImpl<PermissionMapper, Permiss
         return childTree;
     }
 
+    @Override
+    public List<PermissionVO> selectRouterListByUserId(Long userId) {
+        //查询分配给这个用户的所有权限
+        List<Permission> permissionList = baseMapper.selectPermissionByUserId(userId);
+        //转换成树形结构
+        List<PermissionVO> permissionVOList = ConvertUtil.convertList(permissionList, PermissionVO.class);
+        List<PermissionVO> treeList = buildTree(permissionVOList);
+        //转换成前端路由需要的格式
+        return treeList;
+    }
+
+
     public static void main(String[] args) {
         // Long类型比较大小:1、调用longValue 2、使用equals
         Long num1 = 21212323232L;
@@ -76,4 +127,5 @@ public class PermissionServiceImpl extends ServiceImpl<PermissionMapper, Permiss
         System.out.println(num1.longValue() == num2.longValue());//true
         System.out.println(num1.equals(num2));//true
     }
+
 }

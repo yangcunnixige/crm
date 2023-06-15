@@ -5,6 +5,7 @@ import com.baomidou.mybatisplus.extension.service.IService;
 import com.yangnan.crm.rbac.pojo.vo.PermissionVO;
 
 import java.util.List;
+import java.util.Map;
 
 /**
  * <p>
@@ -16,4 +17,10 @@ import java.util.List;
  */
 public interface IPermissionService extends IService<Permission> {
     List<PermissionVO> selectAll();
+
+    Map<String, Object> selectAssignedRole(Long roleId);
+
+    void assignPermission(Long roleId, Long[] permissionIds);
+
+    List<PermissionVO> selectRouterListByUserId(Long userId);
 }

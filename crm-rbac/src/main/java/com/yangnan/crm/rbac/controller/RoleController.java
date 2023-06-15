@@ -92,4 +92,17 @@ public class RoleController {
         boolean isSuccess = roleService.updateById(role);
         return isSuccess == true ? JSONResult.ok("更新成功") : JSONResult.error("更新失败");
     }
+
+    @GetMapping("/selectAssignedRole/{userId}")
+    public JSONResult selectAssignedRole(@PathVariable("userId") Long userId) {
+        Map<String, Object> map = roleService.selectAssignedRole(userId);
+        return JSONResult.ok(map);
+    }
+
+    @PostMapping("/assignRole")
+    public JSONResult assignRole(Long userId, Long[] roleIds) {
+        roleService.assignRole(userId, roleIds);
+        return JSONResult.ok("分配成功");
+    }
+
 }

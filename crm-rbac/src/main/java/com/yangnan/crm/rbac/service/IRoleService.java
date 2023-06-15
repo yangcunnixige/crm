@@ -3,6 +3,8 @@ package com.yangnan.crm.rbac.service;
 import com.yangnan.crm.rbac.pojo.Role;
 import com.baomidou.mybatisplus.extension.service.IService;
 
+import java.util.Map;
+
 /**
  * <p>
  *  服务类
@@ -13,4 +15,7 @@ import com.baomidou.mybatisplus.extension.service.IService;
  */
 public interface IRoleService extends IService<Role> {
 
+    Map<String, Object> selectAssignedRole(Long userId);
+
+    void assignRole(Long userId, Long[] roleIds);
 }
