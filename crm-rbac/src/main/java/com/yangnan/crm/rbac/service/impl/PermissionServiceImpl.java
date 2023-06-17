@@ -4,6 +4,7 @@ import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.yangnan.crm.rbac.pojo.Permission;
 import com.yangnan.crm.rbac.mapper.PermissionMapper;
 import com.yangnan.crm.rbac.pojo.RolePermission;
+import com.yangnan.crm.common.pojo.User;
 import com.yangnan.crm.rbac.pojo.vo.PermissionVO;
 import com.yangnan.crm.rbac.service.IPermissionService;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
@@ -13,7 +14,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.util.CollectionUtils;
 
-import javax.annotation.Resource;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -108,9 +108,14 @@ public class PermissionServiceImpl extends ServiceImpl<PermissionMapper, Permiss
     }
 
     @Override
-    public List<PermissionVO> selectRouterListByUserId(Long userId) {
-        //查询分配给这个用户的所有权限
-        List<Permission> permissionList = baseMapper.selectPermissionByUserId(userId);
+    public List<PermissionVO> selectRouterListByUserId(User user) {
+        List<Permission> permissionList = null;
+        if (user.getName().equalsIgnoreCase("admin")) {
+            permissionList = baseMapper.selectList(new QueryWrapper<Permission>().orderByAsc("sort"));
+        } else {
+            //查询分配给这个用户的所有权限
+            permissionList = baseMapper.selectPermissionByUserId(user.getId());
+        }
         //转换成树形结构
         List<PermissionVO> permissionVOList = ConvertUtil.convertList(permissionList, PermissionVO.class);
         List<PermissionVO> treeList = buildTree(permissionVOList);
@@ -118,6 +123,23 @@ public class PermissionServiceImpl extends ServiceImpl<PermissionMapper, Permiss
         return treeList;
     }
 
+    @Override
+    public List<String> selectBtnListByUserId(User user) {
+        List<Permission> permissionList = null;
+        if (user.getName().equalsIgnoreCase("admin")) {
+            permissionList = baseMapper.selectList(new QueryWrapper<Permission>().orderByAsc("sort"));
+        } else {
+            //查询分配给这个用户的所有权限
+            permissionList = baseMapper.selectPermissionByUserId(user.getId());
+        }
+        List<String> btnList = new ArrayList<>();
+        for (Permission permission : permissionList) {
+            if (permission.getType() == 2) {
+                btnList.add(permission.getPermissionValue());
+            }
+        }
+        return btnList;
+    }
 
     public static void main(String[] args) {
         // Long类型比较大小:1、调用longValue 2、使用equals

@@ -1,4 +1,4 @@
-package com.yangnan.crm.rbac.pojo;
+package com.yangnan.crm.common.pojo;
 
 import com.baomidou.mybatisplus.annotation.FieldFill;
 import com.baomidou.mybatisplus.annotation.IdType;

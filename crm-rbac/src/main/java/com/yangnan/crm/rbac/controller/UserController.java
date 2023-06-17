@@ -1,14 +1,12 @@
 package com.yangnan.crm.rbac.controller;
 
-
-
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.yangnan.crm.common.util.JwtUtils;
 import com.yangnan.crm.common.util.MD5Util;
-import com.yangnan.crm.rbac.pojo.User;
-import com.yangnan.crm.rbac.pojo.vo.UserLoginVO;
+import com.yangnan.crm.common.pojo.User;
+import com.yangnan.crm.common.pojo.UserLoginVO;
 import com.yangnan.crm.rbac.service.IUserService;
 import com.yangnan.crm.common.util.JSONResult;
 import io.swagger.annotations.Api;
@@ -16,8 +14,8 @@ import io.swagger.annotations.ApiImplicitParam;
 import io.swagger.annotations.ApiImplicitParams;
 import io.swagger.annotations.ApiOperation;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
-import springfox.documentation.annotations.ApiIgnore;
 
 import javax.servlet.http.HttpServletRequest;
 import java.util.HashMap;
@@ -47,15 +45,16 @@ public class UserController {
         if (user == null) {
             return JSONResult.error("用户名不存在");
         }
-        //判断密码是不是一致
-        String md5Password = MD5Util.MD5Encode(userLoginVO.getPassword());
-        if (!user.getPassword().equalsIgnoreCase(md5Password)) {
-            return JSONResult.error("密码不正确");
-        }
 
         //判断用户是不是禁用
         if (user.getStatus() == 0) {
             return JSONResult.error("用户已经被禁用");
+        }
+
+        //判断密码是不是一致
+        String md5Password = MD5Util.MD5Encode(userLoginVO.getPassword());
+        if (!user.getPassword().equalsIgnoreCase(md5Password)) {
+            return JSONResult.error("密码不正确");
         }
 
         //如果能执行到这里，证明username和password登录成功
@@ -114,6 +113,7 @@ public class UserController {
     })
     //对于swagger，不适用RequestMapping
     //因为RequestMapping支持任意请求方式，swagger会为整个接口生成7种请求方式的文档。
+    @PreAuthorize("hasAuthority('rbac:user:delete')")
     @DeleteMapping("/deleteById/{id}")
     public JSONResult deleteById(@PathVariable("id") Long id) {
         boolean isSuccess = userService.removeById(id);
@@ -123,8 +123,14 @@ public class UserController {
     @PostMapping("/add")
     public JSONResult add(@RequestBody User user) {
         System.out.println("user: " + user);
-        boolean isSuccess = userService.save(user);
-        return isSuccess == true ? JSONResult.ok("添加成功") : JSONResult.error("添加失败");
+        if(user.getPassword()==null||user.getName()==null||user.getName()==""||user.getPassword()==""){
+            return JSONResult.error("用户名和密码不能为空");
+        }
+        else {
+            user.setPassword(MD5Util.MD5Encode(user.getPassword()));
+            boolean isSuccess = userService.save(user);
+            return isSuccess == true ? JSONResult.ok("添加成功") : JSONResult.error("添加失败");
+        }
     }
 
     @GetMapping("/selectById/{id}")
@@ -132,13 +138,20 @@ public class UserController {
         QueryWrapper wrapper = new QueryWrapper();
         wrapper.eq("id", id);
         User user = userService.getOne(wrapper);
+        user.setPassword("");
         return JSONResult.ok(user);
     }
 
     @PutMapping("/update")
     public JSONResult update(@RequestBody User user) {
-        boolean isSuccess = userService.updateById(user);
-        return isSuccess == true ? JSONResult.ok("更新成功") : JSONResult.error("更新失败");
+        if(user.getPassword()==null||user.getName()==null||user.getName()==""||user.getPassword()==""){
+            return JSONResult.error("用户名和密码不能为空");
+        }
+        else{
+            user.setPassword(MD5Util.MD5Encode(user.getPassword()));
+            boolean isSuccess = userService.updateById(user);
+            return isSuccess == true ? JSONResult.ok("更新成功") : JSONResult.error("更新失败");
+        }
     }
 
     @PutMapping("/updateStatus/{id}/{status}")

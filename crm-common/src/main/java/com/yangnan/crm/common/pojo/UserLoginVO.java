@@ -1,4 +1,4 @@
-package com.yangnan.crm.rbac.pojo.vo;
+package com.yangnan.crm.common.pojo;
 
 import lombok.Data;
 

@@ -4,5 +4,6 @@
     <file url="file://$PROJECT_DIR$/crm-common/src/main/java" charset="UTF-8" />
     <file url="file://$PROJECT_DIR$/crm-oss/src/main/java" charset="UTF-8" />
     <file url="file://$PROJECT_DIR$/crm-rbac/src/main/java" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/crm-security/src/main/java" charset="UTF-8" />
   </component>
 </project>

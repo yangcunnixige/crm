@@ -1,12 +1,14 @@
 package com.yangnan.crm.rbac.service.impl;
 
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
-import com.yangnan.crm.rbac.pojo.User;
+import com.yangnan.crm.common.pojo.User;
 import com.yangnan.crm.rbac.mapper.UserMapper;
 import com.yangnan.crm.rbac.pojo.vo.PermissionVO;
+import com.yangnan.crm.rbac.pojo.vo.RouterVO;
 import com.yangnan.crm.rbac.service.IPermissionService;
 import com.yangnan.crm.rbac.service.IUserService;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
+import com.yangnan.crm.rbac.util.RouterUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -38,13 +40,16 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements IU
         //根据username查询用户基本信息
         User user = selectByUsername(username);
         //根据userid查询菜单(路由)权限
-        List<PermissionVO> permissionVOList =  permissionService.selectRouterListByUserId(user.getId());
+        List<PermissionVO> permissionVOList =  permissionService.selectRouterListByUserId(user);
+        List<RouterVO> routerVOList = RouterUtils.build(permissionVOList);
         //根据userid查询按钮权限
 
+        List<String> btnList = permissionService.selectBtnListByUserId(user);
         Map<String, Object> map = new HashMap<>();
         map.put("name", user.getName());
         map.put("avatar", user.getAvatar());
-        map.put("permissionVOList", permissionVOList);
+        map.put("routers", routerVOList);
+        map.put("btns", btnList);
         return map;
     }
 }

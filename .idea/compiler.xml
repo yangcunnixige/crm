@@ -7,8 +7,9 @@
         <sourceOutputDir name="target/generated-sources/annotations" />
         <sourceTestOutputDir name="target/generated-test-sources/test-annotations" />
         <outputRelativeToContentRoot value="true" />
-        <module name="crm-common" />
         <module name="crm-rbac" />
+        <module name="crm-common" />
+        <module name="crm-security" />
         <module name="crm-oss" />
       </profile>
     </annotationProcessing>
@@ -18,6 +19,7 @@
       <module name="crm-common" options="-parameters" />
       <module name="crm-oss" options="-parameters" />
       <module name="crm-rbac" options="-parameters" />
+      <module name="crm-security" options="-parameters" />
     </option>
   </component>
 </project>

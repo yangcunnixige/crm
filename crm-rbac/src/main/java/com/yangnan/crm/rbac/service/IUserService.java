@@ -1,11 +1,8 @@
 package com.yangnan.crm.rbac.service;
 
-import com.yangnan.crm.rbac.pojo.Permission;
-import com.yangnan.crm.rbac.pojo.User;
+import com.yangnan.crm.common.pojo.User;
 import com.baomidou.mybatisplus.extension.service.IService;
-import com.yangnan.crm.rbac.pojo.vo.PermissionVO;
 
-import java.util.List;
 import java.util.Map;
 
 /**
