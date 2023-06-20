@@ -4,6 +4,7 @@ import com.yangnan.crm.security.exception.SimpleAccessDeniedHandler;
 import com.yangnan.crm.security.exception.SimpleAuthenticationEntryPoint;
 import com.yangnan.crm.security.filter.CustomUsernamePasswordAuthenticationFilter;
 import com.yangnan.crm.security.filter.TokenAuthenticationFilter;
+import com.yangnan.crm.security.service.ILoginLogService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -23,6 +24,9 @@ import javax.annotation.Resource;
 public class WebSecurityConfig {
     @Autowired
     private RedisTemplate redisTemplate;
+
+    @Autowired
+    private ILoginLogService loginLogService;
 
     /**
      * 获取AuthenticationManager（认证管理器），登录时认证使用
@@ -58,7 +62,7 @@ public class WebSecurityConfig {
                 //token校验过滤器加入过滤器链中
                 //TokenAuthenticationFilter放到UsernamePasswordAuthenticationFilter的前面，这样做就是为了除了登录的时候去查询数据库外，其他时候都用token进行认证。
                 .addFilterBefore(new TokenAuthenticationFilter(redisTemplate), CustomUsernamePasswordAuthenticationFilter.class)
-                .addFilter(new CustomUsernamePasswordAuthenticationFilter(authenticationManager, redisTemplate))
+                .addFilter(new CustomUsernamePasswordAuthenticationFilter(authenticationManager, redisTemplate, loginLogService))
         ;
 
         //配置异常处理

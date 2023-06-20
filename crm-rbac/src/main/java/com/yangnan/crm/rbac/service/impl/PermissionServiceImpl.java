@@ -1,11 +1,11 @@
 package com.yangnan.crm.rbac.service.impl;
 
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
-import com.yangnan.crm.rbac.pojo.Permission;
+import com.yangnan.crm.bean.pojo.Permission;
 import com.yangnan.crm.rbac.mapper.PermissionMapper;
-import com.yangnan.crm.rbac.pojo.RolePermission;
+import com.yangnan.crm.bean.pojo.RolePermission;
 import com.yangnan.crm.common.pojo.User;
-import com.yangnan.crm.rbac.pojo.vo.PermissionVO;
+import com.yangnan.crm.bean.vo.PermissionVO;
 import com.yangnan.crm.rbac.service.IPermissionService;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.yangnan.crm.rbac.service.IRolePermissionService;

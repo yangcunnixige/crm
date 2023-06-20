@@ -1,6 +1,6 @@
 package com.yangnan.crm.rbac.mapper;
 
-import com.yangnan.crm.rbac.pojo.Role;
+import com.yangnan.crm.bean.pojo.Role;
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
 
 /**

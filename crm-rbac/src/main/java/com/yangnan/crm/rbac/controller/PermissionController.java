@@ -3,15 +3,14 @@ package com.yangnan.crm.rbac.controller;
 
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.yangnan.crm.common.util.JSONResult;
-import com.yangnan.crm.rbac.pojo.Permission;
-import com.yangnan.crm.rbac.pojo.vo.PermissionVO;
+import com.yangnan.crm.bean.pojo.Permission;
+import com.yangnan.crm.bean.vo.PermissionVO;
 import com.yangnan.crm.rbac.service.IPermissionService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 import java.util.Map;
-import java.util.Random;
 
 /**
  * <p>

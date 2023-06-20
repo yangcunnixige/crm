@@ -13,7 +13,6 @@
         <module>crm-common</module>
         <module>crm-oss</module>
         <module>crm-security</module>
-        <module>bean</module>
         <module>crm-bean</module>
     </modules>
 
@@ -95,6 +94,11 @@
         <dependency>
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-data-redis</artifactId>
+        </dependency>
+
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-aop</artifactId>
         </dependency>
     </dependencies>
 

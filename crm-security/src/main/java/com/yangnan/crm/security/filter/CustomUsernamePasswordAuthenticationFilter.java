@@ -2,9 +2,11 @@ package com.yangnan.crm.security.filter;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.yangnan.crm.common.pojo.UserLoginVO;
+import com.yangnan.crm.common.util.IPUtil;
 import com.yangnan.crm.common.util.JSONResult;
 import com.yangnan.crm.common.util.JwtUtils;
 import com.yangnan.crm.security.custom.CustomUserDetails;
+import com.yangnan.crm.security.service.ILoginLogService;
 import com.yangnan.crm.security.util.JSONResponse;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.http.HttpStatus;
@@ -27,10 +29,12 @@ import java.util.Map;
 public class CustomUsernamePasswordAuthenticationFilter extends UsernamePasswordAuthenticationFilter {
     private AuthenticationManager authenticationManager;
     private RedisTemplate redisTemplate;
+    private ILoginLogService loginLogService;
 
-    public CustomUsernamePasswordAuthenticationFilter(AuthenticationManager authenticationManager, RedisTemplate redisTemplate) {
+    public CustomUsernamePasswordAuthenticationFilter(AuthenticationManager authenticationManager, RedisTemplate redisTemplate, ILoginLogService loginLogService) {    this.authenticationManager = authenticationManager;
         this.authenticationManager = authenticationManager;
         this.redisTemplate = redisTemplate;
+        this.loginLogService = loginLogService;
         // /rbac/user/login
         //指定登录接口以及提交方式
         this.setRequiresAuthenticationRequestMatcher(new AntPathRequestMatcher("/rbac/user/login", "POST"));
@@ -58,6 +62,11 @@ public class CustomUsernamePasswordAuthenticationFilter extends UsernamePassword
         redisTemplate.opsForHash().put("login", customUserDetails.getUsername(), customUserDetails);
         //根据id和name生成token，返回给客户端
         String token = JwtUtils.createToken(customUserDetails.getUser().getId(), customUserDetails.getUser().getName());
+
+        //记录登录成功的日志
+        loginLogService.recordLoginLog(customUserDetails.getUsername(), 1, IPUtil.getIPAddress(request), "登录成功");
+
+
         Map<String, Object> map = new HashMap<>();
         map.put("token", token);
         JSONResponse.out(response, JSONResult.ok("登录失败", map));
@@ -69,6 +78,12 @@ public class CustomUsernamePasswordAuthenticationFilter extends UsernamePassword
     @Override
     protected void unsuccessfulAuthentication(HttpServletRequest request, HttpServletResponse response, AuthenticationException failed) throws IOException, ServletException {
         System.out.println("CustomUsernamePasswordAuthenticationFilter.unsuccessfulAuthentication");
+
+        UserLoginVO userLoginVO = new ObjectMapper().readValue(request.getInputStream(), UserLoginVO.class);
+        //记录登录成功的日志
+        loginLogService.recordLoginLog(userLoginVO.getUsername(), 0, IPUtil.getIPAddress(request), "登录失败");
+
+
         JSONResponse.out(response, JSONResult.error("登录失败"));
     }
 

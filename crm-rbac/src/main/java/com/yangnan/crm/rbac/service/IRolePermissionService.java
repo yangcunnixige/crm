@@ -1,6 +1,6 @@
 package com.yangnan.crm.rbac.service;
 
-import com.yangnan.crm.rbac.pojo.RolePermission;
+import com.yangnan.crm.bean.pojo.RolePermission;
 import com.baomidou.mybatisplus.extension.service.IService;
 
 /**

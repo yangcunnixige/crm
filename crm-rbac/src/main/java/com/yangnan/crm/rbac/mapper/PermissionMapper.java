@@ -1,6 +1,6 @@
 package com.yangnan.crm.rbac.mapper;
 
-import com.yangnan.crm.rbac.pojo.Permission;
+import com.yangnan.crm.bean.pojo.Permission;
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
 
 import java.util.List;

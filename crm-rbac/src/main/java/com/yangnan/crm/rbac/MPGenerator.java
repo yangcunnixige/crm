@@ -16,7 +16,7 @@ import com.baomidou.mybatisplus.generator.fill.Property;
 
 public class MPGenerator {
     //需要配置
-    private static final String dbTables = "login_log";             //需要生成的表名           //需要生成的表名
+    private static final String dbTables = "oper_log";             //需要生成的表名           //需要生成的表名
     private static final Boolean enableSwagger = false;                 //是否开启Swagger
 
     public static void main(String[] args) {

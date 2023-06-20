@@ -1,6 +1,6 @@
 package com.yangnan.crm.rbac.service.impl;
 
-import com.yangnan.crm.rbac.pojo.UserRole;
+import com.yangnan.crm.bean.pojo.UserRole;
 import com.yangnan.crm.rbac.mapper.UserRoleMapper;
 import com.yangnan.crm.rbac.service.IUserRoleService;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;

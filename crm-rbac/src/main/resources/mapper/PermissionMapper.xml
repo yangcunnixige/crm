@@ -2,7 +2,7 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.yangnan.crm.rbac.mapper.PermissionMapper">
 
-    <select id="selectPermissionByUserId" resultType="com.yangnan.crm.rbac.pojo.Permission">
+    <select id="selectPermissionByUserId" resultType="com.yangnan.crm.bean.pojo.Permission">
         SELECT DISTINCT
             p.id,
             p.pid,

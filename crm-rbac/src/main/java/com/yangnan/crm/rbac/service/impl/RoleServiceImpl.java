@@ -1,9 +1,9 @@
 package com.yangnan.crm.rbac.service.impl;
 
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
-import com.yangnan.crm.rbac.pojo.Role;
+import com.yangnan.crm.bean.pojo.Role;
 import com.yangnan.crm.rbac.mapper.RoleMapper;
-import com.yangnan.crm.rbac.pojo.UserRole;
+import com.yangnan.crm.bean.pojo.UserRole;
 import com.yangnan.crm.rbac.service.IRoleService;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.yangnan.crm.rbac.service.IUserRoleService;

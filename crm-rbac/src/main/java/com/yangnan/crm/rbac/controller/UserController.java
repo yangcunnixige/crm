@@ -8,7 +8,9 @@ import com.yangnan.crm.common.util.JwtUtils;
 import com.yangnan.crm.common.util.MD5Util;
 import com.yangnan.crm.common.pojo.User;
 import com.yangnan.crm.common.pojo.UserLoginVO;
-import com.yangnan.crm.rbac.pojo.query.UserQuery;
+import com.yangnan.crm.bean.query.UserQuery;
+import com.yangnan.crm.rbac.annotation.Log;
+import com.yangnan.crm.rbac.enums.LogOperType;
 import com.yangnan.crm.rbac.service.IUserService;
 import com.yangnan.crm.common.util.JSONResult;
 import io.swagger.annotations.Api;
@@ -127,18 +129,21 @@ public class UserController {
     //对于swagger，不适用RequestMapping
     //因为RequestMapping支持任意请求方式，swagger会为整个接口生成7种请求方式的文档。
     @PreAuthorize("hasAuthority('rbac:user:delete')")
+    @Log(title = "用户管理", operType = LogOperType.DELETE)
     @DeleteMapping("/deleteById/{id}")
     public JSONResult deleteById(@PathVariable("id") Long id) {
         boolean isSuccess = userService.removeById(id);
         return isSuccess == true ? JSONResult.ok("删除成功") : JSONResult.error("删除失败");
     }
 
+    @Log(title = "用户管理", operType = LogOperType.DELETE)
     @DeleteMapping("/deleteAll/{ids}")
     public JSONResult deleteAll(@PathVariable("ids") Long[] ids) {
         boolean isSuccess = userService.removeByIds(Arrays.asList(ids));
         return isSuccess == true ? JSONResult.ok("批量删除成功") : JSONResult.error("批量删除失败");
     }
 
+    @Log(title = "用户管理", operType = LogOperType.INSERT)
     @PostMapping("/add")
     public JSONResult add(@RequestBody User user) {
         System.out.println("user: " + user);
@@ -161,6 +166,7 @@ public class UserController {
         return JSONResult.ok(user);
     }
 
+    @Log
     @PutMapping("/update")
     public JSONResult update(@RequestBody User user) {
         if(user.getPassword()==null||user.getName()==null||user.getName()==""||user.getPassword()==""){

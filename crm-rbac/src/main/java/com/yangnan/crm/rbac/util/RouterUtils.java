@@ -1,8 +1,8 @@
 package com.yangnan.crm.rbac.util;
 
-import com.yangnan.crm.rbac.pojo.vo.PermissionVO;
-import com.yangnan.crm.rbac.pojo.vo.RouterMetaVO;
-import com.yangnan.crm.rbac.pojo.vo.RouterVO;
+import com.yangnan.crm.bean.vo.PermissionVO;
+import com.yangnan.crm.bean.vo.RouterMetaVO;
+import com.yangnan.crm.bean.vo.RouterVO;
 import org.springframework.util.CollectionUtils;
 
 import java.util.LinkedList;
