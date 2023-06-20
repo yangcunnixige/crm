@@ -5,6 +5,7 @@ import com.yangnan.crm.common.pojo.UserLoginVO;
 import com.yangnan.crm.common.util.JSONResult;
 import com.yangnan.crm.common.util.JwtUtils;
 import com.yangnan.crm.security.custom.CustomUserDetails;
+import com.yangnan.crm.security.util.JSONResponse;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
@@ -59,7 +60,7 @@ public class CustomUsernamePasswordAuthenticationFilter extends UsernamePassword
         String token = JwtUtils.createToken(customUserDetails.getUser().getId(), customUserDetails.getUser().getName());
         Map<String, Object> map = new HashMap<>();
         map.put("token", token);
-        responseJson(response, JSONResult.ok("登录失败", map));
+        JSONResponse.out(response, JSONResult.ok("登录失败", map));
 
     }
 
@@ -68,7 +69,7 @@ public class CustomUsernamePasswordAuthenticationFilter extends UsernamePassword
     @Override
     protected void unsuccessfulAuthentication(HttpServletRequest request, HttpServletResponse response, AuthenticationException failed) throws IOException, ServletException {
         System.out.println("CustomUsernamePasswordAuthenticationFilter.unsuccessfulAuthentication");
-        responseJson(response, JSONResult.error("登录失败"));
+        JSONResponse.out(response, JSONResult.error("登录失败"));
     }
 
     private void responseJson(HttpServletResponse response, JSONResult jsonResult) throws IOException {

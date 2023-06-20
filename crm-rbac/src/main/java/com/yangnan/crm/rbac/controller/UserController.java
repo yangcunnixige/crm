@@ -2,11 +2,13 @@ package com.yangnan.crm.rbac.controller;
 
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.core.metadata.IPage;
+import com.baomidou.mybatisplus.core.toolkit.ObjectUtils;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.yangnan.crm.common.util.JwtUtils;
 import com.yangnan.crm.common.util.MD5Util;
 import com.yangnan.crm.common.pojo.User;
 import com.yangnan.crm.common.pojo.UserLoginVO;
+import com.yangnan.crm.rbac.pojo.query.UserQuery;
 import com.yangnan.crm.rbac.service.IUserService;
 import com.yangnan.crm.common.util.JSONResult;
 import io.swagger.annotations.Api;
@@ -18,6 +20,7 @@ import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletRequest;
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -91,9 +94,19 @@ public class UserController {
             @ApiImplicitParam(name = "limit", value = "每页有多少条数据", required = false, defaultValue = "5"),
     })
     @GetMapping("/selectByPage")
-    public JSONResult selectByPage(@RequestParam(defaultValue = "1") Integer page, Integer limit) {
+    public JSONResult selectByPage(@RequestParam(defaultValue = "1") Integer page, Integer limit, UserQuery userQuery) {
         IPage<User> iPage = new Page<>(page, limit);
-        userService.page(iPage);
+        QueryWrapper<User> queryWrapper = new QueryWrapper<>();
+        if (!ObjectUtils.isEmpty(userQuery.getName())) {
+            queryWrapper.eq("name", userQuery.getName());
+        }
+        if (!ObjectUtils.isEmpty(userQuery.getEmail())) {
+            queryWrapper.eq("email", userQuery.getEmail());
+        }
+        if (!ObjectUtils.isEmpty(userQuery.getStatus())) {
+            queryWrapper.eq("status", userQuery.getStatus());
+        }
+        userService.page(iPage, queryWrapper);
         Map<String, Object> map = new HashMap<>();
         map.put("total", iPage.getTotal());
         map.put("list", iPage.getRecords());
@@ -118,6 +131,12 @@ public class UserController {
     public JSONResult deleteById(@PathVariable("id") Long id) {
         boolean isSuccess = userService.removeById(id);
         return isSuccess == true ? JSONResult.ok("删除成功") : JSONResult.error("删除失败");
+    }
+
+    @DeleteMapping("/deleteAll/{ids}")
+    public JSONResult deleteAll(@PathVariable("ids") Long[] ids) {
+        boolean isSuccess = userService.removeByIds(Arrays.asList(ids));
+        return isSuccess == true ? JSONResult.ok("批量删除成功") : JSONResult.error("批量删除失败");
     }
 
     @PostMapping("/add")

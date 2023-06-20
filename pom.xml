@@ -13,6 +13,8 @@
         <module>crm-common</module>
         <module>crm-oss</module>
         <module>crm-security</module>
+        <module>bean</module>
+        <module>crm-bean</module>
     </modules>
 
     <parent>

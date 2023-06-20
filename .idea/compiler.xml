@@ -8,6 +8,7 @@
         <sourceTestOutputDir name="target/generated-test-sources/test-annotations" />
         <outputRelativeToContentRoot value="true" />
         <module name="crm-rbac" />
+        <module name="crm-bean" />
         <module name="crm-common" />
         <module name="crm-security" />
         <module name="crm-oss" />
@@ -16,6 +17,7 @@
   </component>
   <component name="JavacSettings">
     <option name="ADDITIONAL_OPTIONS_OVERRIDE">
+      <module name="crm-bean" options="-parameters" />
       <module name="crm-common" options="-parameters" />
       <module name="crm-oss" options="-parameters" />
       <module name="crm-rbac" options="-parameters" />
